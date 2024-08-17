@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GamesStaticSQL.Data;
+using GamesStaticSQL.Data.DAO;
 
 namespace GamesStaticSQL
 {
@@ -10,7 +12,7 @@ namespace GamesStaticSQL
     {
         public static void Option1()
         {
-            DB.GetAllGames();
+            GameRepository.GetAllGames();
         }
 
         public static void Option2()
@@ -18,28 +20,28 @@ namespace GamesStaticSQL
             int n1 = ValidateIntInput("Ver juegos entre (1er id): ");
             int n2 = ValidateIntInput("Y entre (2do id): ");
             Console.WriteLine("Ver juegos entre (1er id): ");
-            DB.GetGamesBetween(n1, n2);
+            GameRepository.GetGamesBetween(n1, n2);
         }
 
         public static void Option3()
         {
             Console.WriteLine("Ingrese el genero de los juegos a buscar:");
             string genre = Console.ReadLine();
-            DB.GetGamesWithGenre(genre);
+            GameRepository.GetGamesWithGenre(genre);
         }
 
         public static void Option4()
         {
             Console.WriteLine("Ingrese el nombre del juego a buscar:");
             string name = Console.ReadLine();
-            DB.GetGameWithName(name);
+            GameRepository.GetGameWithName(name);
         }
 
         public static void Option5()
         {
             Console.WriteLine();
             int amount = ValidateIntInput("Ingrese la cantidad de juegos a mostrar:");
-            DB.GetGamesByQuantity(amount);
+            GameRepository.GetGamesByQuantity(amount);
         }
 
         private static int ValidateIntInput(string prompt)

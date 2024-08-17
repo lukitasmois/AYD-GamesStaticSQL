@@ -7,11 +7,10 @@ using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GamesStaticSQL
+namespace GamesStaticSQL.Data.DAO
 {
-    internal class DB
+    internal class GameDao
     {
-        private static SqlConnection _connection;
 
         private static SqlConnection GetConnection()
         {
@@ -28,39 +27,41 @@ namespace GamesStaticSQL
             return connection;
         }
 
-        public static void GetGamesBetween(int n1, int n2)
+        public static List<Dictionary<string, object>> GetGamesBetween(int n1, int n2)
         {
             string query = $"select * from games where gameId between {n1} and {n2}";
+            List<Dictionary<string, object>> gamesData = new List<Dictionary<string, object>>();
 
             using (SqlConnection connection = GetConnection())
             {
                 SqlCommand cmd = new SqlCommand(query, connection);
                 SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    ShowGameFromDB(reader);
-                }
+
+                gamesData = CreateListDictionary(reader);
             }
+
+            return gamesData;
         }
-        public static void GetAllGames()
+        public static List<Dictionary<string, object>> GetAllGames()
         {
+            string query = "select * from games";
+            List<Dictionary<string, object>> gamesData = new List<Dictionary<string, object>>();
+
             using (SqlConnection connection = GetConnection())
             {
-                string query = "SELECT * FROM games";
                 SqlCommand cmd = new SqlCommand(query, connection);
                 SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    ShowGameFromDB(reader);
-                }
+                
+                gamesData = CreateListDictionary(reader);
 
-
+                return gamesData;
             }
         }
 
-        public static void GetGamesWithGenre(string genre)
+        public static List<Dictionary<string, object>> GetGamesWithGenre(string genre)
         {
             string query = $"select * from games where genreName = '{genre}'";
+            List<Dictionary<string, object>> gamesData = new List<Dictionary<string, object>>();
             using (SqlConnection connection = GetConnection())
             {
                 SqlCommand cmd = new SqlCommand(query, connection);
@@ -68,49 +69,38 @@ namespace GamesStaticSQL
 
                 if (reader.HasRows)
                 {
-                    while (reader.Read())
-                    {
-                        ShowGameFromDB(reader);
-                    }
+                    gamesData = CreateListDictionary(reader);
                 }
                 else
                 {
                     Console.WriteLine($"No se encontro ningun juego con el genero: {genre}");
                 }
             }
+
+            return gamesData;
         }
 
-        public static void GetGameWithName(string name)
+        public static List<Dictionary<string, object>> GetGameWithName(string name)
         {
             string query = $"select * from games where gameName like '%{name}%'";
+            List<Dictionary<string, object>> gamesData = new List<Dictionary<string, object>>();
 
-            using(SqlConnection connection = GetConnection())
+            using (SqlConnection connection = GetConnection())
             {
                 SqlCommand cmd = new SqlCommand(query, connection);
                 SqlDataReader reader = cmd.ExecuteReader();
 
-                if (reader.HasRows)
-                {
-                    Console.WriteLine("----------------------------");
-                    Console.WriteLine($"Coincidencias con {name}:");
-                    while (reader.Read())
-                    {
-                        
-                        ShowGameFromDB(reader);
-                    }
-                    Console.WriteLine("----------------------------");
-                }
-                else
-                {
-                    Console.WriteLine($"No se encontro ningun juego con el nombre {name}");
-                }
+                    gamesData = CreateListDictionary(reader);  
             }
+
+            return gamesData;
         }
 
 
-        public static void GetGamesByQuantity(int amount)
+        public static List<Dictionary<string, object>> GetGamesByQuantity(int amount)
         {
             string query = $"select top {amount} * from games";
+            List<Dictionary<string, object>> gamesData = new List<Dictionary<string, object>>();
 
             using (SqlConnection connection = GetConnection())
             {
@@ -118,24 +108,30 @@ namespace GamesStaticSQL
                 {
                     SqlDataReader reader = cmd.ExecuteReader();
 
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            ShowGameFromDB(reader);
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("No existen registros en la base de datos.");
-                    }
+                    gamesData = CreateListDictionary(reader);
                 }
             }
+
+            return gamesData;
         }
 
-        private static void ShowGameFromDB(SqlDataReader reader)
+        private static List<Dictionary<string, object>> CreateListDictionary(SqlDataReader reader)
         {
-            Console.WriteLine($"[Game Id={reader.GetValue(0)}, Name={reader.GetValue(2)}]");
+            List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
+
+            while (reader.Read())
+            {
+                Dictionary<string, object> gameData = new Dictionary<string, object>
+                {
+                    {"gameId", reader.GetValue(0)},
+                    {"genreName", reader.GetValue(1)},
+                    {"gameName", reader.GetValue(2)},
+                };
+
+                list.Add(gameData);
+            }
+
+            return list;
         }
     }
 
