@@ -8,7 +8,7 @@ bool next= true;
 while (next)
 {
     Console.Clear();
-    MostrarMenu();
+    Menu.MostrarMenu();
     string input = Console.ReadLine();
     int selection;
 
@@ -51,16 +51,4 @@ while (next)
         Console.WriteLine("Presiona cualquier tecla para continuar...");
         Console.ReadKey();
     }
-}
-
-void MostrarMenu()
-{
-    Console.WriteLine("----------------------------");
-    Console.WriteLine("Seleccione una operacion:");
-    Console.WriteLine("1. Ver listado de los juegos.");
-    Console.WriteLine("2. Ver juegos entre...");
-    Console.WriteLine("3. Ver juegos por genero.");
-    Console.WriteLine("4. Buscar Juego...");
-    Console.WriteLine("5. Mostrar Varios Juegos.");
-    Console.WriteLine("----------------------------");
 }

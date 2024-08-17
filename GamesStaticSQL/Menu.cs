@@ -10,6 +10,18 @@ namespace GamesStaticSQL
 {
     internal class Menu
     {
+        public static void MostrarMenu()
+        {
+            Console.WriteLine("----------------------------");
+            Console.WriteLine("Seleccione una operacion:");
+            Console.WriteLine("1. Ver listado de los juegos.");
+            Console.WriteLine("2. Ver juegos entre...");
+            Console.WriteLine("3. Ver juegos por genero.");
+            Console.WriteLine("4. Buscar Juego...");
+            Console.WriteLine("5. Mostrar Varios Juegos.");
+            Console.WriteLine("----------------------------");
+        }
+
         public static void Option1()
         {
             GameRepository.GetAllGames();
