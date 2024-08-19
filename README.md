@@ -15,3 +15,4 @@ La clase debe poseer métodos únicamente para la obtención de registros:
 ## Posibles Mejoras
 - Crear una clase especifica que se encargue de realizar la conexion con la base de datos para disminuir la responsabilidad de la clase Repository.  
 - Encapsular las variables de conexion con la base de datos en un .env o similar para aumentar la seguridad del codigo.
+- Corregir las querys SQL para aumentar la seguridad (evitar utilizar SELECT * FROM y utilizar alias).
